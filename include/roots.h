@@ -48,4 +48,12 @@ roots_bisection(
     const double b,
     const roots_params *restrict r );
 
+double
+roots_secant(
+    double f(void *restrict, double const),
+    void *restrict params,
+    const double a,
+    const double b,
+    const roots_params *restrict r );
+
 #endif // ROOTS_H_

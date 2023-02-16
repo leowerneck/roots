@@ -1,10 +1,10 @@
 #include "roots.h"
 
 /*
- * Function   : roots_bisection
+ * Function   : roots_secant
  * Author     : Leo Werneck
  *
- * Find the root of f(x) in the interval [a,b] using the bisection method.
+ * Find the root of f(x) in the interval [a,b] using the secant method.
  *
  * Parameters : f        - Function for which the root is computed.
  *            : params   - Object containing all parameters needed by the
@@ -15,10 +15,10 @@
  *
  * Returns    : The root of f(x).
  *
- * References : https://en.wikipedia.org/wiki/Bisection_method
+ * References : https://en.wikipedia.org/wiki/Secant_method
  */
 double
-roots_bisection(
+roots_secant(
     double f(void *restrict, double const),
     void *restrict params,
     const double a,
@@ -42,23 +42,21 @@ roots_bisection(
     roots_error(roots_error_root_not_bracketed,
                 "Interval (%g,%g) does not bracket the root\n", a, b);
 
-  // Step 4: Perform the bisection algorithm
+  // Step 4: Perform the secant algorithm
   for(int it=0;it<r->itmax;it++) {
-    // Step 4.a: Compute the mid point and the function at the midpoint
-    const double xm = (x0+x1)/2;
-    const double fm = f(params, xm);
+    // Step 4.a: Compute the new point
+    const double x2 = x1 - f1 * (x1-x0) / (f1-f0);
+    const double f2 = f(params, x2);
 
-    // Step 4.b: Adjust the limits of the interval
-    if( f0*fm < 0 ) {
-      x1 = xm; f1 = fm;
-    }
-    else {
-      x0 = xm; f0 = fm;
-    }
+    // Step 4.b: Check for convergence
+    if( fabs(f2) < r->ftol || fabs(x2-x1) < r->xtol )
+      return x2;
 
-    // Step 4.c: Check for convergence and return if converged
-    if( fabs(fm) < r->ftol || fabs(x1-x0) < r->xtol )
-      return fabs(f0) < fabs(f1) ? x0 : x1;
+    // Step 4.c: Cicle the value of x0, x1, f0, f1
+    x0 = x1;
+    f0 = f1;
+    x1 = x2;
+    f1 = f2;
   }
 
   // Step 5: The only way to get here is if we have exceeded the maximum number
