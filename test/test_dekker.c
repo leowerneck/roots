@@ -10,7 +10,7 @@ int main() {
   r.itmax = 300;
   r.ftol  = 1e-10;
   r.xtol  = 1e-10;
-  const double root = roots_secant(f, NULL, 30, 10, &r);
+  const double root = roots_dekker(f, NULL, 30, 10, &r);
   roots_info("Found root at x  : %.15e\n", root);
   roots_info("Residual at root : %.15e\n", f(NULL, root));
 
