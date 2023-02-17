@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Step 1: Run the meson command
+meson setup build --prefix=`pwd`
+
+# Step 2: Compile the library
+meson compile -C build
+
+# Step 3: Run any available tests
+meson test -C build
+
+# Step 4: Install the library
+meson install -C build

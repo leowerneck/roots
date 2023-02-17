@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "Removing include lib build directories"
+rm -rf include lib build
+echo "All done"
