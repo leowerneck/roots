@@ -42,6 +42,14 @@ roots_secant(
     roots_params *restrict r );
 
 roots_error_t
+roots_false_position(
+    double f(double const, void *restrict),
+    void *restrict params,
+    double a,
+    double b,
+    roots_params *restrict r );
+
+roots_error_t
 roots_dekker(
     double f(double const, void *restrict),
     void *restrict params,

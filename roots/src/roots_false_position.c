@@ -2,10 +2,10 @@
 #include "utils.h"
 
 /*
- * Function   : roots_bisection
+ * Function   : roots_false_position
  * Author     : Leo Werneck
  *
- * Find the root of f(x) in the interval [a,b] using the bisection method.
+ * Find the root of f(x) in the interval [a,b] using the false position method.
  *
  * Parameters : f        - Function for which the root is computed.
  *            : fparams  - Object containing all parameters needed by the
@@ -22,10 +22,10 @@
  *                 - roots_error_max_iter if the maximum allowed number of
  *                   iterations is exceeded
  *
- * References : https://en.wikipedia.org/wiki/Bisection_method
+ * References : https://en.wikipedia.org/wiki/Regula_falsi
  */
 roots_error_t
-roots_bisection(
+roots_false_position(
     double f(double const, void *restrict),
     void *restrict fparams,
     double a,
@@ -33,7 +33,7 @@ roots_bisection(
     roots_params *restrict r ) {
 
   // Step 0: Set basic info to the roots_params struct
-  sprintf(r->method, "bisection");
+  sprintf(r->method, "false position");
   r->a = a;
   r->b = b;
 
@@ -42,13 +42,20 @@ roots_bisection(
   if( check_a_b_compute_fa_fb(f, fparams, &a, &b, &fa, &fb, r) >= roots_success )
     return r->error_key;
 
-  // Step 2: Bisection algorithm
+  // Step 2: False-position algorithm
   for(r->n_iters=0;r->n_iters<r->iter_max;r->n_iters++) {
-    // Step 2.a: Compute the mid point and the function at the midpoint
-    const double c  = (a+b)/2;
+    // Step 2.a: Compute the new point
+    const double c  = (a*fb - b*fa) / (fb-fa);
     const double fc = f(c, fparams);
 
-    // Step 2.b: Adjust the limits of the interval
+    // Step 2.b: Check for convergence
+    if( fabs(fc) < r->ftol || fabs(c-b) < r->xtol ) {
+      r->root     = c;
+      r->residual = fc;
+      return (r->error_key = roots_success);
+    }
+
+    // Step 2.c: Adjust the interval, making sure the root is still in [a,b]
     if( fa*fc < 0 ) {
       b  = c;
       fb = fc;
@@ -56,13 +63,6 @@ roots_bisection(
     else {
       a  = c;
       fa = fc;
-    }
-
-    // Step 2.c: Check for convergence
-    if( fabs(fc) < r->ftol || fabs(b-a) < r->xtol ) {
-      r->root     = c;
-      r->residual = fc;
-      return (r->error_key = roots_success);
     }
   }
 

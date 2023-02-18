@@ -1,6 +1,6 @@
 project( 'Roots',
          'c',
-         version : '0.3.0',
+         version : '0.4.0',
          license : 'BSD-2-Clause license',
          default_options : ['buildtype=debugoptimized'] )
 

@@ -45,7 +45,7 @@ roots_secant(
   // Step 2: Secant algorithm
   for(r->n_iters=0;r->n_iters<r->iter_max;r->n_iters++) {
     // Step 2.a: Compute the new point
-    const double c  = b - fb * (b-a) / (fb-fa);
+    const double c  = (a*fb - b*fa) / (fb-fa);
     const double fc = f(c, fparams);
 
     // Step 2.b: Check for convergence
@@ -55,7 +55,7 @@ roots_secant(
       return (r->error_key = roots_success);
     }
 
-    // Step 2.c: Cicle the value of a, b, c, fa, fb, fc
+    // Step 2.c: Cicle the values: a <- b <- c and fa <- fb <- fc
     a  = b;
     b  = c;
     fa = fb;
