@@ -57,4 +57,12 @@ roots_dekker(
     double b,
     roots_params *restrict r );
 
+roots_error_t
+roots_ridder(
+    double f(double const, void *restrict),
+    void *restrict params,
+    double a,
+    double b,
+    roots_params *restrict r );
+
 #endif // ROOTS_H_

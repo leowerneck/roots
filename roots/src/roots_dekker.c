@@ -33,7 +33,7 @@ roots_dekker(
     roots_params *restrict r ) {
 
   // Step 0: Set basic info to the roots_params struct
-  sprintf(r->method, "dekker");
+  sprintf(r->method, "Dekker's");
   r->a = a;
   r->b = b;
 

@@ -33,7 +33,7 @@ roots_secant(
     roots_params *restrict r ) {
 
   // Step 0: Set basic info to the roots_params struct
-  sprintf(r->method, "secant");
+  sprintf(r->method, "Secant");
   r->a = a;
   r->b = b;
 

@@ -2,10 +2,10 @@
 #include "utils.h"
 
 /*
- * Function   : roots_false_position
+ * Function   : roots_ridder
  * Author     : Leo Werneck
  *
- * Find the root of f(x) in the interval [a,b] using the false position method.
+ * Find the root of f(x) in the interval [a,b] using Ridder's method.
  *
  * Parameters : f        - Function for which the root is computed.
  *            : fparams  - Object containing all parameters needed by the
@@ -22,10 +22,10 @@
  *                 - roots_error_max_iter if the maximum allowed number of
  *                   iterations is exceeded
  *
- * References : https://en.wikipedia.org/wiki/Regula_falsi
+ * References : https://en.wikipedia.org/wiki/Ridders%27_method
  */
 roots_error_t
-roots_false_position(
+roots_ridder(
     double f(double const, void *restrict),
     void *restrict fparams,
     double a,
@@ -33,7 +33,7 @@ roots_false_position(
     roots_params *restrict r ) {
 
   // Step 0: Set basic info to the roots_params struct
-  sprintf(r->method, "False position");
+  sprintf(r->method, "Ridder's");
   r->a = a;
   r->b = b;
 
@@ -44,26 +44,48 @@ roots_false_position(
 
   // Step 2: False-position algorithm
   for(r->n_iters=0;r->n_iters<r->iter_max;r->n_iters++) {
-    // Step 2.a: Compute the new point
-    const double c  = (a*fb - b*fa) / (fb-fa);
-    const double fc = f(c, fparams);
+
+    // Step 2.a: Compute the midpoint
+    const double m  = (a+b)/2;
+    const double fm = f(m, fparams);
 
     // Step 2.b: Check for convergence
+    if( fabs(fm) < r->ftol || fabs(m-a) < r->xtol ) {
+      r->root     = m;
+      r->residual = fm;
+      return (r->error_key = roots_success);
+    }
+
+    // Step 2.c: Compute new point
+    const double d  = sqrt(fm*fm - fa*fb);
+    const double c  = m + (m-a)*sign(fa-fb)*fm/d;
+    const double fc = f(c, fparams);
+
+    // Step 2.d: Check for convergence
     if( fabs(fc) < r->ftol || fabs(c-b) < r->xtol ) {
       r->root     = c;
       r->residual = fc;
       return (r->error_key = roots_success);
     }
 
-    // Step 2.c: Adjust the interval, making sure the root is still in [a,b]
-    if( fa*fc < 0 ) {
+    // Step 2.e: Adjust the interval
+    if( fm*fc < 0 ) {
+      a  = m;
       b  = c;
+      fa = fm;
       fb = fc;
     }
-    else {
+    else if( fa*fc < 0 ) {
       a  = c;
       fa = fc;
     }
+    else {
+      b  = c;
+      fb = fc;
+    }
+
+    // Step 2.f: Ensure the best guess for the root is in b
+    ensure_b_is_closest_to_root(&a, &b, &fa, &fb);
   }
 
   // Step 3: The only way to get here is if we have exceeded the maximum number

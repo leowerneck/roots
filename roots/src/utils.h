@@ -23,6 +23,23 @@ swap(
 }
 
 /*
+ * Function   : sign
+ * Author     : Leo Werneck
+ *
+ * Returns the sign of a number x.
+ *
+ * Parameters : x        - Number
+ *            : b        - Second number.
+ *
+ * Returns    : +1 if x>=0, -1 otherwise.
+ */
+static inline double
+sign( const double x ) {
+
+  return x >= 0.0 ? 1.0 : -1.0;
+}
+
+/*
  * Function   : ensure_b_is_closest_to_root
  * Author     : Leo Werneck
  *
