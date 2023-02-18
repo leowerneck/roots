@@ -28,13 +28,19 @@ else:
 
 print("Creating Makefile...", end="")
 with open("Makefile", "w") as f:
-    f.write(f""".PHONY: roots
+    f.write(f""".PHONY: roots test
 prefix={args.prefix}
 
 all: roots
 
 roots:
 \t{args.meson} compile -vC build
+
+test:
+\t{args.meson} test -C build
+
+test-verbose:
+\t{args.meson} test -vC build
 
 install: roots
 \t{args.meson} install -C build

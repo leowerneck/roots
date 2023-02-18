@@ -1,4 +1,15 @@
 #include "roots.h"
+#include "utils.h"
+
+roots_error_t
+check_a_b_compute_fa_fb(
+    double f(void *restrict, const double),
+    void   *restrict params,
+    double *restrict a,
+    double *restrict b,
+    double *restrict fa,
+    double *restrict fb,
+    roots_params *restrict r );
 
 /*
  * Function   : roots_bisection
@@ -17,53 +28,51 @@
  *
  * References : https://en.wikipedia.org/wiki/Bisection_method
  */
-double
+roots_error_t
 roots_bisection(
     double f(void *restrict, double const),
     void *restrict params,
-    const double a,
-    const double b,
-    const roots_params *restrict r ) {
+    double a,
+    double b,
+    roots_params *restrict r ) {
 
-  // Step 1: Check if a is the root.
-  double x0 = a;
-  double f0 = f(params, x0);
-  if( fabs(f0) < r->ftol )
-    return x0;
+  sprintf(r->method, "bisection");
+  r->a = a;
+  r->b = b;
 
-  // Step 2: Check if b is the root.
-  double x1 = b;
-  double f1 = f(params, x1);
-  if( fabs(f1) < r->ftol )
-    return x1;
+  // Step 1: Check whether a or b is the root; compute fa and fb
+  double fa, fb;
+  if( check_a_b_compute_fa_fb(f, params, &a, &b, &fa, &fb, r) >= roots_success )
+    return r->error_key;
 
-  // Step 3: Check the root is in [a,b]
-  if( f0*f1 > 0 )
-    roots_error(roots_error_root_not_bracketed,
-                "Interval (%g,%g) does not bracket the root\n", a, b);
+  // Step 2: Bisection algorithm
+  for(r->n_iters=0;r->n_iters<r->iter_max;r->n_iters++) {
+    // Step 2.a: Compute the mid point and the function at the midpoint
+    const double c  = (a+b)/2;
+    const double fc = f(params, c);
 
-  // Step 4: Perform the bisection algorithm
-  for(int it=0;it<r->itmax;it++) {
-    // Step 4.a: Compute the mid point and the function at the midpoint
-    const double xm = (x0+x1)/2;
-    const double fm = f(params, xm);
-
-    // Step 4.b: Adjust the limits of the interval
-    if( f0*fm < 0 ) {
-      x1 = xm; f1 = fm;
+    // Step 2.b: Adjust the limits of the interval
+    if( fa*fc < 0 ) {
+      b  = c;
+      fb = fc;
     }
     else {
-      x0 = xm; f0 = fm;
+      a  = c;
+      fa = fc;
     }
 
-    // Step 4.c: Check for convergence and return if converged
-    if( fabs(fm) < r->ftol || fabs(x1-x0) < r->xtol )
-      return fabs(f0) < fabs(f1) ? x0 : x1;
+    // Step 2.c: Keep best root in b
+    ensure_b_is_closest_to_root(&a, &b, &fa, &fb);
+
+    // Step 2.d: Check for convergence
+    if( fabs(fb) < r->ftol || fabs(b-a) < r->xtol ) {
+      r->root     = b;
+      r->residual = fb;
+      return (r->error_key = roots_success);
+    }
   }
 
-  // Step 5: The only way to get here is if we have exceeded the maximum number
-  //         of iterations allowed; error out.
-  roots_error(roots_error_max_iter,
-              "Exceeded maximum number of iterations (%d)\n", r->itmax);
-  return roots_error_max_iter;
+  // Step 3: The only way to get here is if we have exceeded the maximum number
+  //         of iterations allowed.
+  return (r->error_key = roots_error_max_iter);
 }

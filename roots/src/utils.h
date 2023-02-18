@@ -1,6 +1,17 @@
-#ifndef ROOTS_UTILS_H_
-#define ROOTS_UTILS_H_
+#ifndef UTILS_H_
+#define UTILS_H_
 
+/*
+ * Function   : swap
+ * Author     : Leo Werneck
+ *
+ * Swaps the values of two doubles a and b.
+ *
+ * Parameters : a        - First number.
+ *            : b        - Second number.
+ *
+ * Returns    : Nothing.
+ */
 static inline void
 swap(
     double *restrict a,
@@ -11,4 +22,30 @@ swap(
   *b = c;
 }
 
-#endif // ROOTS_UTILS_H_
+/*
+ * Function   : ensure_b_is_closest_to_root
+ * Author     : Leo Werneck
+ *
+ * Given a, b, f(a), f(b), ensures |f(b)| < |f(a)|.
+ *
+ * Parameters : a        - First point where f(x) is evaluated at.
+ *            : b        - Second point where f(x) is evaluated at.
+ * Parameters : fa       - f(a)
+ *            : fb       - f(b).
+ *
+ * Returns    : Nothing.
+ */
+static inline void
+ensure_b_is_closest_to_root(
+    double *restrict a,
+    double *restrict b,
+    double *restrict fa,
+    double *restrict fb ) {
+
+  if( fabs(*fa) < fabs(*fb) ) {
+    swap(a, b);
+    swap(fa, fb);
+  }
+}
+
+#endif // UTILS_H_

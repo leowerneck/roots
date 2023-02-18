@@ -1,6 +1,16 @@
 #include "roots.h"
 #include "utils.h"
 
+roots_error_t
+check_a_b_compute_fa_fb(
+    double f(void *restrict, const double),
+    void   *restrict params,
+    double *restrict a,
+    double *restrict b,
+    double *restrict fa,
+    double *restrict fb,
+    roots_params *restrict r );
+
 /*
  * Function   : roots_dekker
  * Author     : Leo Werneck
@@ -18,79 +28,63 @@
  *
  * References : https://en.wikipedia.org/wiki/Brent%27s_method
  */
-double
+roots_error_t
 roots_dekker(
     double f(void *restrict, double const),
     void *restrict params,
-    const double a,
-    const double b,
-    const roots_params *restrict r ) {
+    double a,
+    double b,
+    roots_params *restrict r ) {
 
-  // Step 1: Check if a is the root.
-  double x0 = a;
-  double f0 = f(params, x0);
-  if( fabs(f0) < r->ftol )
-    return x0;
+  sprintf(r->method, "dekker");
+  r->a = a;
+  r->b = b;
 
-  // Step 2: Check if b is the root.
-  double x1 = b;
-  double f1 = f(params, x1);
-  if( fabs(f1) < r->ftol )
-    return x1;
+  // Step 1: Check whether a or b is the root; compute fa and fb
+  double fa, fb;
+  if( check_a_b_compute_fa_fb(f, params, &a, &b, &fa, &fb, r) >= roots_success )
+    return r->error_key;
 
-  // Step 3: Check the root is in [a,b].
-  if( f0*f1 > 0 )
-    roots_error(roots_error_root_not_bracketed,
-                "Interval (%g,%g) does not bracket the root\n", a, b);
+  // Step 2: Define d, such that f(d) * f(b) < 0 (initially a).
+  double d = a;
 
-  // Step 4: Keep the better guess in x1.
-  if( fabs(f1) > fabs(f0) ) {
-    swap(&x0, &x1);
-    swap(&f0, &f1);
-  }
+  // Step 3: Dekker's algorithm
+  for(r->n_iters=0;r->n_iters<r->iter_max;r->n_iters++) {
+    // Step 3.a: Compute the midpoint
+    const double m = (b+d)/2;
 
-  // Step 5: Define op, such that f(op) * f(x1) < 0 (initially x0).
-  double op = x0;
+    // Step 3.b: Compute the secant method
+    const double s = fa != fb ? b - fb * (b-a) / (fb-fa) : m;
 
-  // Step 6: Perform Dekker's method algorithm
-  for(int it=0;it<r->itmax;it++) {
-    // Step 6.a: Compute the midpoint
-    const double xm = (x1+op)/2;
+    // Step 3.c: Set the next guess for the root
+    const double c = (s>b && s<m) ? s : m;
 
-    // Step 6.b: Compute the secant method
-    const double xs = f1 != f0 ? x1 - f1 * (x1-x0) / (f1-f0) : xm;
+    // Step 3.d: Compute the next function value
+    const double fc = f(params, c);
 
-    // Step 6.c: Set the next guess for the root
-    const double x2 = (xs>x1 && xs<xm) ? xs : xm;
-
-    // Step 6.d: Compute the next function value
-    const double f2 = f(params, x2);
-
-    // Step 6.e: Cicle the values of x0, x1, f0, f1
-    if( f0*f2 < 0 ) {
-      x1 = x2;
-      f1 = f2;
+    // Step 3.e: Cicle the values of a, b, fa, fb
+    if( fa*fb < 0 ) {
+      b  = c;
+      fb = fc;
     }
     else {
-      op = x1;
-      x0 = x2;
-      f0 = f2;
+      d  = b;
+      a  = c;
+      fa = fc;
     }
 
-    // Step 6.f: Keep the better guess in x1.
-    if( fabs(f1) > fabs(f0) ) {
-      swap(&x0, &x1);
-      swap(&f0, &f1);
-    }
+    // Step 3.f: Keep best root in b
+    ensure_b_is_closest_to_root(&a, &b, &fa, &fb);
 
-    // Step 6.h: Check for convergence
-    if( fabs(f1) < r->ftol || fabs(x1-x0) < r->xtol )
-      return x2;
+    // Step 3.h: Check for convergence
+    if( fabs(fb) < r->ftol || fabs(b-a) < r->xtol ) {
+      r->root     = b;
+      r->residual = fb;
+      return (r->error_key = roots_success);
+    }
   }
 
-  // Step 5: The only way to get here is if we have exceeded the maximum number
-  //         of iterations allowed; error out.
-  roots_error(roots_error_max_iter,
-              "Exceeded maximum number of iterations (%d)\n", r->itmax);
-  return roots_error_max_iter;
+  // Step 4: The only way to get here is if we have exceeded the maximum number
+  //         of iterations allowed.
+  return (r->error_key = roots_error_max_iter);
 }
