@@ -48,4 +48,18 @@ ensure_b_is_closest_to_root(
   }
 }
 
+/***********************
+ * Function prototypes *
+ ***********************/
+// This function is implemented in check_a_b_compute_fa_fb.c
+roots_error_t
+check_a_b_compute_fa_fb(
+    double f(const double, void *restrict),
+    void   *restrict params,
+    double *restrict a,
+    double *restrict b,
+    double *restrict fa,
+    double *restrict fb,
+    roots_params *restrict r );
+
 #endif // UTILS_H_

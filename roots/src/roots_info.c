@@ -1,5 +1,15 @@
 #include "roots.h"
 
+/*
+ * Function   : roots_info
+ * Author     : Leo Werneck
+ *
+ * Prints information about the root-finding process.
+ *
+ * Parameters : r        - Pointer to roots library parameters (see roots.h).
+ *
+ * Returns    : Nothing.
+ */
 void
 roots_info(const roots_params *restrict r) {
 

@@ -1,6 +1,6 @@
 #include "roots.h"
 
-double f(void *params, const double x) {
+double f(const double x, void *params) {
   return (x-1.234)*(x+111);
 }
 

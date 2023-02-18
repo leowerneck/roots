@@ -27,7 +27,7 @@ roots_info(const roots_params *restrict r);
 
 roots_error_t
 roots_bisection(
-    double f(void *restrict, double const),
+    double f(double const, void *restrict),
     void *restrict params,
     double a,
     double b,
@@ -35,7 +35,7 @@ roots_bisection(
 
 roots_error_t
 roots_secant(
-    double f(void *restrict, double const),
+    double f(double const, void *restrict),
     void *restrict params,
     double a,
     double b,
@@ -43,7 +43,7 @@ roots_secant(
 
 roots_error_t
 roots_dekker(
-    double f(void *restrict, double const),
+    double f(double const, void *restrict),
     void *restrict params,
     double a,
     double b,

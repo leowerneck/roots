@@ -1,16 +1,6 @@
 #include "roots.h"
 #include "utils.h"
 
-roots_error_t
-check_a_b_compute_fa_fb(
-    double f(void *restrict, const double),
-    void   *restrict params,
-    double *restrict a,
-    double *restrict b,
-    double *restrict fa,
-    double *restrict fb,
-    roots_params *restrict r );
-
 /*
  * Function   : roots_dekker
  * Author     : Leo Werneck
@@ -18,31 +8,38 @@ check_a_b_compute_fa_fb(
  * Find the root of f(x) in the interval [a,b] using Dekker's method.
  *
  * Parameters : f        - Function for which the root is computed.
- *            : params   - Object containing all parameters needed by the
+ *            : fparams  - Object containing all parameters needed by the
  *                         function f other than the variable x.
  *            : a        - Lower limit of the initial interval.
  *            : b        - Upper limit of the initial interval.
- *            : r        - Steering parameters (see roots.h).
+ *            : r        - Pointer to roots library parameters (see roots.h).
+ *                         The root is stored in r->root.
  *
- * Returns    : The root of f(x).
+ * Returns    : One the following error keys:
+ *                 - roots_success if the root is found
+ *                 - roots_error_root_not_bracketed if the interval [a,b]
+ *                   does not bracket a root of f(x)
+ *                 - roots_error_max_iter if the maximum allowed number of
+ *                   iterations is exceeded
  *
  * References : https://en.wikipedia.org/wiki/Brent%27s_method
  */
 roots_error_t
 roots_dekker(
-    double f(void *restrict, double const),
-    void *restrict params,
+    double f(double const, void *restrict),
+    void *restrict fparams,
     double a,
     double b,
     roots_params *restrict r ) {
 
+  // Step 0: Set basic info to the roots_params struct
   sprintf(r->method, "dekker");
   r->a = a;
   r->b = b;
 
   // Step 1: Check whether a or b is the root; compute fa and fb
   double fa, fb;
-  if( check_a_b_compute_fa_fb(f, params, &a, &b, &fa, &fb, r) >= roots_success )
+  if( check_a_b_compute_fa_fb(f, fparams, &a, &b, &fa, &fb, r) >= roots_success )
     return r->error_key;
 
   // Step 2: Define d, such that f(d) * f(b) < 0 (initially a).
@@ -60,7 +57,7 @@ roots_dekker(
     const double c = (s>b && s<m) ? s : m;
 
     // Step 3.d: Compute the next function value
-    const double fc = f(params, c);
+    const double fc = f(c, fparams);
 
     // Step 3.e: Cicle the values of a, b, fa, fb
     if( fa*fb < 0 ) {
