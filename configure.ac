@@ -6,7 +6,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIRS([m4])
 
 dnl Automake configuration
-AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
 
 dnl Program checks
 : ${CFLAGS="-Wall -O2 -march=native"}
@@ -14,6 +14,7 @@ AC_PROG_CC
 AC_PROG_INSTALL
 AM_PROG_AR
 LT_INIT
+
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_INLINE
