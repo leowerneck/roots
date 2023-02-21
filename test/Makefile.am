@@ -1,4 +1,4 @@
-ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS} -I m4
+#ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS} -I m4
 AM_CPPFLAGS = -I$(top_srcdir)/roots/include
 LDADD = $(top_srcdir)/roots/src/libroots.la
 

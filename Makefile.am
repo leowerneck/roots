@@ -1,5 +1,5 @@
 SUBDIRS = roots test
-ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS} -I m4
+#ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS} -I m4
 
 realclean: clean
 	rm -rf autom4te.cache/
