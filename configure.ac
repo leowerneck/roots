@@ -4,10 +4,10 @@ AC_INIT([Roots], [0.5.0], [wernecklr@gmail.com])
 AC_CONFIG_SRCDIR([roots/include/roots.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_MACRO_DIRS([m4])
 
 dnl Automake configuration
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
+AM_SILENT_RULES([yes])
 
 dnl Program checks
 : ${CFLAGS="-Wall -O2 -march=native"}

@@ -1,5 +1,6 @@
 ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS} -I m4
 AM_CPPFLAGS = -I$(top_srcdir)/roots/include
+AM_LDFLAGS = -lm
 
 include_HEADERS = $(top_srcdir)/roots/include/roots.h
 noinst_HEADERS = utils.h
