@@ -40,7 +40,7 @@ check_a_b_compute_fa_fb(
 
   // Step 1: Compute fa; check if a is the root.
   *fa = f(*a, fparams);
-  if( fabs(*fa) < r->ftol ) {
+  if( *fa == 0.0 ) {
     r->root     = *a;
     r->residual = *fa;
     return (r->error_key = roots_success);
@@ -48,7 +48,7 @@ check_a_b_compute_fa_fb(
 
   // Step 2: Compute fb; check if b is the root.
   *fb = f(*b, fparams);
-  if( fabs(*fb) < r->ftol ) {
+  if( *fb == 0.0 ) {
     r->root     = *b;
     r->residual = *fb;
     return (r->error_key = roots_success);
@@ -62,7 +62,7 @@ check_a_b_compute_fa_fb(
   ensure_b_is_closest_to_root(a, b, fa, fb);
 
   // Step 5: If [a,b] is too small, return b
-  if( fabs(*a - *b) < r->xtol ) {
+  if( fabs(*a - *b) < r->tol ) {
     r->root     = *b;
     r->residual = *fb;
     return (r->error_key = roots_success);

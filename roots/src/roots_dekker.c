@@ -74,7 +74,7 @@ roots_dekker(
     ensure_b_is_closest_to_root(&a, &b, &fa, &fb);
 
     // Step 3.h: Check for convergence
-    if( fabs(fb) < r->ftol || fabs(b-a) < r->xtol ) {
+    if( fabs(b-a) < r->tol || fb == 0.0 ) {
       r->root     = b;
       r->residual = fb;
       return (r->error_key = roots_success);

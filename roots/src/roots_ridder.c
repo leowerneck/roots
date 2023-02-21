@@ -50,7 +50,7 @@ roots_ridder(
     const double fm = f(m, fparams);
 
     // Step 2.b: Check for convergence
-    if( fabs(fm) < r->ftol || fabs(m-a) < r->xtol ) {
+    if( fabs(m-a) < r->tol || fm == 0.0 ) {
       r->root     = m;
       r->residual = fm;
       return (r->error_key = roots_success);
@@ -62,7 +62,7 @@ roots_ridder(
     const double fc = f(c, fparams);
 
     // Step 2.d: Check for convergence
-    if( fabs(fc) < r->ftol || fabs(c-b) < r->xtol ) {
+    if( fabs(c-b) < r->tol || fc == 0.0 ) {
       r->root     = c;
       r->residual = fc;
       return (r->error_key = roots_success);

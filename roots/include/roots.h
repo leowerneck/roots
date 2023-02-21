@@ -19,7 +19,7 @@ typedef struct roots_params {
   char method[1024];
   unsigned int n_iters, iter_max;
   double a, b;
-  double residual, root, xtol, ftol;
+  double residual, root, tol;
 } roots_params;
 
 void

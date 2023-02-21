@@ -8,8 +8,7 @@ int main() {
 
   roots_params r;
   r.iter_max = 300;
-  r.ftol  = 1e-10;
-  r.xtol  = 1e-10;
+  r.tol  = 1e-10;
   roots_dekker(f, NULL, 200, 0, &r);
   roots_info(&r);
 

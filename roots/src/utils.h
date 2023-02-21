@@ -23,6 +23,30 @@ swap(
 }
 
 /*
+ * Function   : cicle
+ * Author     : Leo Werneck
+ *
+ * From inputs a, b, c, cicle a <- b <- c <- a.
+ *
+ * Parameters : a        - First number.
+ *            : b        - Second number.
+ *            : c        - Third number.
+ *
+ * Returns    : Nothing.
+ */
+static inline void
+cicle(
+    double *restrict a,
+    double *restrict b,
+    double *restrict c ) {
+
+  const double d = *a;
+  *a = *b;
+  *b = *c;
+  *c = d;
+}
+
+/*
  * Function   : sign
  * Author     : Leo Werneck
  *

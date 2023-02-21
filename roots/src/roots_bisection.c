@@ -59,7 +59,7 @@ roots_bisection(
     }
 
     // Step 2.c: Check for convergence
-    if( fabs(fc) < r->ftol || fabs(b-a) < r->xtol ) {
+    if( fabs(b-a) < r->tol || fc == 0.0 ) {
       r->root     = c;
       r->residual = fc;
       return (r->error_key = roots_success);
