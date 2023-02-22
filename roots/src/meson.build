@@ -4,4 +4,5 @@ sources = files('check_a_b_compute_fa_fb.c',
                 'roots_secant.c',
                 'roots_false_position.c',
                 'roots_dekker.c',
-                'roots_ridder.c')
+                'roots_ridder.c',
+                'roots_brent.c')

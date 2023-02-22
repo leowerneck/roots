@@ -43,7 +43,7 @@ roots_secant(
     return r->error_key;
 
   // Step 2: Secant algorithm
-  for(r->n_iters=0;r->n_iters<r->iter_max;r->n_iters++) {
+  for(r->n_iters=1;r->n_iters<=r->iter_max;r->n_iters++) {
     // Step 2.a: Compute the new point
     const double c  = (a*fb - b*fa) / (fb-fa);
     const double fc = f(c, fparams);

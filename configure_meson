@@ -28,7 +28,16 @@ else:
 
 print("Creating Makefile...", end="")
 with open("Makefile", "w") as f:
-    f.write(f""".PHONY: roots test
+    f.write(f"""# Source: https://stackoverflow.com/questions/2214575/passing-arguments-to-make-run
+# If the first argument is "test*"...
+ifeq ($(filter test%, $(firstword $(MAKECMDGOALS))),)
+  # use the rest as arguments for "test"
+  TEST_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(TEST_ARGS):;@:)
+endif
+
+.PHONY: roots test test-verbose
 prefix={args.prefix}
 
 all: roots
@@ -37,10 +46,10 @@ roots:
 \t{args.meson} compile -vC build
 
 test:
-\t{args.meson} test -C build
+\t{args.meson} test -C build $(TEST_ARGS)
 
 test-verbose:
-\t{args.meson} test -vC build
+\t{args.meson} test -vC build $(TEST_ARGS)
 
 install: roots
 \t{args.meson} install -C build

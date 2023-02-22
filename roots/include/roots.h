@@ -65,4 +65,12 @@ roots_ridder(
     double b,
     roots_params *restrict r );
 
+roots_error_t
+roots_brent(
+    double f(double const, void *restrict),
+    void *restrict params,
+    double a,
+    double b,
+    roots_params *restrict r );
+
 #endif // ROOTS_H_

@@ -18,8 +18,13 @@ test_ridder = executable('test_ridder',
                          sources : 'test_ridder.c',
                          dependencies : [dep_roots])
 
+test_brent = executable('test_brent',
+                         sources : 'test_brent.c',
+                         dependencies : [dep_roots])
+
 test('Bisection method test', test_bisection)
 test('Secant method test', test_secant)
 test('False-position method test', test_false_position)
 test('Dekker\'s method test', test_dekker)
 test('Ridder\'s method test', test_ridder)
+test('Brent\'s method test', test_brent)

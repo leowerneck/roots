@@ -43,7 +43,7 @@ roots_bisection(
     return r->error_key;
 
   // Step 2: Bisection algorithm
-  for(r->n_iters=0;r->n_iters<r->iter_max;r->n_iters++) {
+  for(r->n_iters=1;r->n_iters<=r->iter_max;r->n_iters++) {
     // Step 2.a: Compute the mid point and the function at the midpoint
     const double c  = (a+b)/2;
     const double fc = f(c, fparams);

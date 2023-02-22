@@ -43,7 +43,7 @@ roots_ridder(
     return r->error_key;
 
   // Step 2: False-position algorithm
-  for(r->n_iters=0;r->n_iters<r->iter_max;r->n_iters++) {
+  for(r->n_iters=1;r->n_iters<=r->iter_max;r->n_iters++) {
 
     // Step 2.a: Compute the midpoint
     const double m  = (a+b)/2;
