@@ -53,7 +53,7 @@ roots_brent(
   double tol, m, P, Q, R, S;
 
   // Step 3: Brent's algorithm
-  for(r->n_iters=1;r->n_iters<=r->iter_max;r->n_iters++) {
+  for(r->n_iters=1;r->n_iters<=r->max_iters;r->n_iters++) {
 
     // Step 3.a: Keep the bracket in [b,c]
     if( fb*fc > 0 ) {

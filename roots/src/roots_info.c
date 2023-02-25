@@ -35,7 +35,7 @@ roots_info(const roots_params *restrict r) {
     case roots_error_max_iter:
       printf("Failure\n");
       printf("(roots)   %16s : ", "Error message");
-      printf("Maximum number of iterations (%d) exceeded.\n", r->iter_max);
+      printf("Maximum number of iterations (%d) exceeded.\n", r->max_iters);
       break;
   }
 

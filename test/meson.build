@@ -22,9 +22,14 @@ test_brent = executable('test_brent',
                          sources : 'test_brent.c',
                          dependencies : [dep_roots])
 
+test_toms748 = executable('test_toms748',
+                         sources : 'test_toms748.c',
+                         dependencies : [dep_roots])
+
 test('Bisection method test', test_bisection)
 test('Secant method test', test_secant)
 test('False-position method test', test_false_position)
 test('Dekker\'s method test', test_dekker)
 test('Ridder\'s method test', test_ridder)
 test('Brent\'s method test', test_brent)
+test('TOMS748\'s method test', test_toms748)

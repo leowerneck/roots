@@ -7,7 +7,7 @@ double f(const double x, void *params) {
 int main() {
 
   roots_params r;
-  r.iter_max = 300;
+  r.max_iters = 300;
   r.tol  = 1e-10;
   roots_brent(f, NULL, 200, 0, &r);
   roots_info(&r);

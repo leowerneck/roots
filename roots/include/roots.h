@@ -17,7 +17,7 @@ typedef enum {
 typedef struct roots_params {
   roots_error_t error_key;
   char method[1024];
-  unsigned int n_iters, iter_max;
+  unsigned int n_iters, max_iters;
   double a, b;
   double residual, root, tol;
 } roots_params;
@@ -67,6 +67,14 @@ roots_ridder(
 
 roots_error_t
 roots_brent(
+    double f(double const, void *restrict),
+    void *restrict params,
+    double a,
+    double b,
+    roots_params *restrict r );
+
+roots_error_t
+roots_toms748(
     double f(double const, void *restrict),
     void *restrict params,
     double a,

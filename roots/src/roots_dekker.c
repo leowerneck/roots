@@ -46,7 +46,7 @@ roots_dekker(
   double d = a;
 
   // Step 3: Dekker's algorithm
-  for(r->n_iters=1;r->n_iters<=r->iter_max;r->n_iters++) {
+  for(r->n_iters=1;r->n_iters<=r->max_iters;r->n_iters++) {
     // Step 3.a: Compute the midpoint
     const double m = (b+d)/2;
 
