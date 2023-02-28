@@ -1,3 +1,12 @@
+/*
+ * This is a modified version of the file toms748_solve.hpp from the Boost
+ * library (https://www.boost.org). The copyright notice from the original
+ * file is maintained below, as well as information of how to obtain a copy
+ * of the Boost Software License, Version 1.0. The specific file on which
+ * this file is based on can be found at:
+ * https://www.boost.org/doc/libs/1_81_0/boost/math/tools/toms748_solve.hpp
+ */
+
 //  (C) Copyright John Maddock 2006.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -8,8 +17,6 @@
 
 #include "roots.h"
 #include "utils.h"
-
-#define epsilon 2.220446049250313e-16
 
 static void
 bracket(
@@ -31,7 +38,7 @@ bracket(
   // the interval.  In other words d is the third best guess
   // to the root.
   //
-  const double tol = 2.0 * epsilon;
+  const double tol = 2.0 * DBL_EPSILON;
   //
   // If the interval [a,b] is very small, or if c is too close
   // to one end of the interval then we need to adjust the
@@ -106,7 +113,7 @@ secant_interpolate(
   // that the function is unlikely to be smooth with a root very
   // close to a or b.
   //
-  double tol = 5 * epsilon;
+  double tol = 5 * DBL_EPSILON;
   double c   = a - (fa / (fb - fa)) * (b - a);
   if((c <= a + fabs(a) * tol) || (c >= b - fabs(b) * tol))
     return (a + b) / 2;
