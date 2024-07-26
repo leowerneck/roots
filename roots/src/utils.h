@@ -13,9 +13,7 @@
  * Returns    : Nothing.
  */
 static inline void
-swap(
-    double *restrict a,
-    double *restrict b ) {
+swap(double *restrict a, double *restrict b) {
 
   const double c = *a;
   *a = *b;
@@ -35,10 +33,7 @@ swap(
  * Returns    : Nothing.
  */
 static inline void
-cicle(
-    double *restrict a,
-    double *restrict b,
-    double *restrict c ) {
+cicle(double *restrict a, double *restrict b, double *restrict c) {
 
   *a = *b;
   *b = *c;
@@ -57,9 +52,9 @@ cicle(
  * Returns    : +1 if x>=0, -1 otherwise.
  */
 static inline int
-sign( const double x ) {
+sign(const double x) {
 
-  return (x>0) - (x<0);
+  return (x > 0) - (x < 0);
 }
 
 /*
@@ -77,12 +72,12 @@ sign( const double x ) {
  */
 static inline void
 ensure_b_is_closest_to_root(
-    double *restrict a,
-    double *restrict b,
-    double *restrict fa,
-    double *restrict fb ) {
+      double *restrict a,
+      double *restrict b,
+      double *restrict fa,
+      double *restrict fb) {
 
-  if( fabs(*fa) < fabs(*fb) ) {
+  if(fabs(*fa) < fabs(*fb)) {
     swap(a, b);
     swap(fa, fb);
   }
@@ -158,12 +153,12 @@ ensure_b_is_closest_to_root(
 // This function is implemented in check_a_b_compute_fa_fb.c
 roots_error_t
 check_a_b_compute_fa_fb(
-    double f(const double, void *restrict),
-    void   *restrict params,
-    double *restrict a,
-    double *restrict b,
-    double *restrict fa,
-    double *restrict fb,
-    roots_params *restrict r );
+      double f(const double, void *restrict),
+      void *restrict params,
+      double *restrict a,
+      double *restrict b,
+      double *restrict fa,
+      double *restrict fb,
+      roots_params *restrict r);
 
-#endif // UTILS_H_
+#endif  // UTILS_H_

@@ -1,4 +1,5 @@
 #include <float.h>
+
 #include "roots.h"
 #include "utils.h"
 
@@ -29,11 +30,11 @@
  */
 roots_error_t
 roots_brent(
-    double f(double const, void *restrict),
-    void *restrict fparams,
-    double a,
-    double b,
-    roots_params *restrict r ) {
+      double f(const double, void *restrict),
+      void *restrict fparams,
+      double a,
+      double b,
+      roots_params *restrict r) {
 
   // Step 0: Set basic info to the roots_params struct
   sprintf(r->method, "Brent's");
@@ -42,83 +43,90 @@ roots_brent(
 
   // Step 1: Check whether a or b is the root; compute fa and fb
   double fa, fb;
-  if( check_a_b_compute_fa_fb(f, fparams, &a, &b, &fa, &fb, r) >= roots_success )
+  if(check_a_b_compute_fa_fb(f, fparams, &a, &b, &fa, &fb, r) >= roots_success) {
     return r->error_key;
+  }
 
   // Step 2: Declare/initialize auxiliary variables
-  double c  = b;
+  double c = b;
   double fc = fb;
-  double d  = b-a;
-  double e  = d;
+  double d = b - a;
+  double e = d;
   double tol, m, P, Q, R, S;
 
   // Step 3: Brent's algorithm
-  for(r->n_iters=1;r->n_iters<=r->max_iters;r->n_iters++) {
+  for(r->n_iters = 1; r->n_iters <= r->max_iters; r->n_iters++) {
 
     // Step 3.a: Keep the bracket in [b,c]
-    if( fb*fc > 0 ) {
-      c  = a;
+    if(fb * fc > 0) {
+      c = a;
       fc = fa;
-      d  = e = b-a;
+      d = e = b - a;
     }
 
     // Step 3.b: Keep the best guess in b
-    if( fabs(fc) < fabs(fb) ) {
-      cicle(&a , &b , &c );
+    if(fabs(fc) < fabs(fb)) {
+      cicle(&a, &b, &c);
       cicle(&fa, &fb, &fc);
     }
 
     // Step 3.d: Set the tolerance for this iteration
-    tol = 2*DBL_EPSILON*fabs(b) + 0.5*r->tol;
+    tol = 2 * DBL_EPSILON * fabs(b) + 0.5 * r->tol;
 
     // Step 3.e: Compute midpoint
-    m = 0.5*(c-b);
+    m = 0.5 * (c - b);
 
     // Step 3.f: Check for convergence
-    if( fabs(b-a) < tol || fb == 0.0 ) {
-      r->root     = b;
+    if(fabs(b - a) < tol || fb == 0.0) {
+      r->root = b;
       r->residual = fb;
       return (r->error_key = roots_success);
     }
 
     // Step 3.g: Check whether to bisect or interpolate
-    if( fabs(e) < tol || fabs(fa) <= fabs(fb) )
-      e = d = m; // bisect
+    if(fabs(e) < tol || fabs(fa) <= fabs(fb)) {
+      e = d = m;  // bisect
+    }
     else {
       // Attempt interpolation
-      S = fb/fa;
-      if( a == c ) {
+      S = fb / fa;
+      if(a == c) {
         // Step 3.g.1: Linear interpolation
-        P = 2*m*S;
-        Q = 1-S;
+        P = 2 * m * S;
+        Q = 1 - S;
       }
       else {
         // Step 3.g.2: Inverse quadratic interpolation
-        Q = fa/fc;
-        R = fb/fc;
-        P = S*(2*m*Q*(Q-R)-(b-a)*(R-1));
-        Q = (Q-1)*(R-1)*(S-1);
+        Q = fa / fc;
+        R = fb / fc;
+        P = S * (2 * m * Q * (Q - R) - (b - a) * (R - 1));
+        Q = (Q - 1) * (R - 1) * (S - 1);
       }
-      if( P > 0 )
+      if(P > 0) {
         Q = -Q;
-      else
+      }
+      else {
         P = -P;
+      }
 
       // Step 3.g.3: Accept interpolation?
-      if( 2*P < 3*m*Q - fabs(tol*Q) && 2*P < fabs(e*Q) ) {
+      if(2 * P < 3 * m * Q - fabs(tol * Q) && 2 * P < fabs(e * Q)) {
         // Yes
         e = d;
-        d = P/Q;
+        d = P / Q;
       }
-      else
-        e = d = m; // Interpolation failed; do a bisection
+      else {
+        e = d = m;  // Interpolation failed; do a bisection
+      }
     }
-    a  = b;
+    a = b;
     fa = fb;
-    if( fabs(d) > tol )
+    if(fabs(d) > tol) {
       b += d;
-    else
-      b += m>0 ? tol : -tol;
+    }
+    else {
+      b += m > 0 ? tol : -tol;
+    }
     fb = f(b, fparams);
   }
 

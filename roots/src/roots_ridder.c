@@ -26,11 +26,11 @@
  */
 roots_error_t
 roots_ridder(
-    double f(double const, void *restrict),
-    void *restrict fparams,
-    double a,
-    double b,
-    roots_params *restrict r ) {
+      double f(const double, void *restrict),
+      void *restrict fparams,
+      double a,
+      double b,
+      roots_params *restrict r) {
 
   // Step 0: Set basic info to the roots_params struct
   sprintf(r->method, "Ridder's");
@@ -39,48 +39,49 @@ roots_ridder(
 
   // Step 1: Check whether a or b is the root; compute fa and fb
   double fa, fb;
-  if( check_a_b_compute_fa_fb(f, fparams, &a, &b, &fa, &fb, r) >= roots_success )
+  if(check_a_b_compute_fa_fb(f, fparams, &a, &b, &fa, &fb, r) >= roots_success) {
     return r->error_key;
+  }
 
   // Step 2: False-position algorithm
-  for(r->n_iters=1;r->n_iters<=r->max_iters;r->n_iters++) {
+  for(r->n_iters = 1; r->n_iters <= r->max_iters; r->n_iters++) {
 
     // Step 2.a: Compute the midpoint
-    const double m  = (a+b)/2;
+    const double m = (a + b) / 2;
     const double fm = f(m, fparams);
 
     // Step 2.b: Check for convergence
-    if( fabs(m-a) < r->tol || fm == 0.0 ) {
-      r->root     = m;
+    if(fabs(m - a) < r->tol || fm == 0.0) {
+      r->root = m;
       r->residual = fm;
       return (r->error_key = roots_success);
     }
 
     // Step 2.c: Compute new point
-    const double d  = sqrt(fm*fm - fa*fb);
-    const double c  = m + (m-a)*sign(fa-fb)*fm/d;
+    const double d = sqrt(fm * fm - fa * fb);
+    const double c = m + (m - a) * sign(fa - fb) * fm / d;
     const double fc = f(c, fparams);
 
     // Step 2.d: Check for convergence
-    if( fabs(c-b) < r->tol || fc == 0.0 ) {
-      r->root     = c;
+    if(fabs(c - b) < r->tol || fc == 0.0) {
+      r->root = c;
       r->residual = fc;
       return (r->error_key = roots_success);
     }
 
     // Step 2.e: Adjust the interval
-    if( fm*fc < 0 ) {
-      a  = m;
-      b  = c;
+    if(fm * fc < 0) {
+      a = m;
+      b = c;
       fa = fm;
       fb = fc;
     }
-    else if( fa*fc < 0 ) {
-      a  = c;
+    else if(fa * fc < 0) {
+      a = c;
       fa = fc;
     }
     else {
-      b  = c;
+      b = c;
       fb = fc;
     }
 

@@ -1,7 +1,7 @@
 ---
 Language: Cpp
 AccessModifierOffset: -2
-AlignAfterOpenBracket: Align
+AlignAfterOpenBracket: AlwaysBreak
 AlignArrayOfStructures: None
 AlignConsecutiveAssignments:
   Enabled: false
@@ -88,7 +88,7 @@ ColumnLimit: 99
 CommentPragmas: "^ IWYU pragma:"
 CompactNamespaces: false
 ConstructorInitializerIndentWidth: 4
-ContinuationIndentWidth: 4
+ContinuationIndentWidth: 6
 Cpp11BracedListStyle: false
 DerivePointerAlignment: false
 DisableFormat: false

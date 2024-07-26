@@ -26,11 +26,11 @@
  */
 roots_error_t
 roots_bisection(
-    double f(double const, void *restrict),
-    void *restrict fparams,
-    double a,
-    double b,
-    roots_params *restrict r ) {
+      double f(const double, void *restrict),
+      void *restrict fparams,
+      double a,
+      double b,
+      roots_params *restrict r) {
 
   // Step 0: Set basic info to the roots_params struct
   sprintf(r->method, "Bisection");
@@ -39,28 +39,29 @@ roots_bisection(
 
   // Step 1: Check whether a or b is the root; compute fa and fb
   double fa, fb;
-  if( check_a_b_compute_fa_fb(f, fparams, &a, &b, &fa, &fb, r) >= roots_success )
+  if(check_a_b_compute_fa_fb(f, fparams, &a, &b, &fa, &fb, r) >= roots_success) {
     return r->error_key;
+  }
 
   // Step 2: Bisection algorithm
-  for(r->n_iters=1;r->n_iters<=r->max_iters;r->n_iters++) {
+  for(r->n_iters = 1; r->n_iters <= r->max_iters; r->n_iters++) {
     // Step 2.a: Compute the mid point and the function at the midpoint
-    const double c  = (a+b)/2;
+    const double c = (a + b) / 2;
     const double fc = f(c, fparams);
 
     // Step 2.b: Adjust the limits of the interval
-    if( fa*fc < 0 ) {
-      b  = c;
+    if(fa * fc < 0) {
+      b = c;
       fb = fc;
     }
     else {
-      a  = c;
+      a = c;
       fa = fc;
     }
 
     // Step 2.c: Check for convergence
-    if( fabs(b-a) < r->tol || fc == 0.0 ) {
-      r->root     = c;
+    if(fabs(b - a) < r->tol || fc == 0.0) {
+      r->root = c;
       r->residual = fc;
       return (r->error_key = roots_success);
     }

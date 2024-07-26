@@ -16,10 +16,13 @@ roots_info(const roots_params *restrict r) {
   // Step 1: Print basic message to the user
   printf("(roots) Root-finding information:\n");
   printf("(roots)   %16s : %s\n", "Method", r->method);
-  printf("(roots)   %16s : [%c%21.15e, %c%21.15e]\n",
-         "Initial interval",
-         r->a >= 0 ? '+' : '-', fabs(r->a),
-         r->b >= 0 ? '+' : '-', fabs(r->b));
+  printf(
+        "(roots)   %16s : [%c%21.15e, %c%21.15e]\n",
+        "Initial interval",
+        r->a >= 0 ? '+' : '-',
+        fabs(r->a),
+        r->b >= 0 ? '+' : '-',
+        fabs(r->b));
   printf("(roots)   %16s : ", "Status");
   switch(r->error_key) {
     case roots_continue:
@@ -40,7 +43,7 @@ roots_info(const roots_params *restrict r) {
   }
 
   // Step 2: If succeeded, print detailed success message
-  if( !r->error_key ) {
+  if(!r->error_key) {
     printf("(roots)   %16s : %d\n", "Iterations", r->n_iters);
     printf("(roots)   %16s : %.15e\n", "Root", r->root);
     printf("(roots)   %16s : %.15e\n", "Residual", r->residual);
