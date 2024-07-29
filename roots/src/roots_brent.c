@@ -46,11 +46,7 @@ roots_error_t roots_brent(
     return r->error_key;
   }
 
-<<<<<<< HEAD
-  // Step 2: Declare/initialize auxiliary variables
-=======
   // Step 2: Declare auxiliary variables
->>>>>>> 9b5fb6f (Clang-formatted; minor updateS)
   double c = b;
   double fc = fb;
   double d = b - a;
@@ -69,13 +65,6 @@ roots_error_t roots_brent(
 
     // Step 3.b: Keep the best guess in b
     if(fabs(fc) < fabs(fb)) {
-<<<<<<< HEAD
-      cicle(&a, &b, &c);
-      cicle(&fa, &fb, &fc);
-    }
-
-    // Step 3.d: Set the tolerance for this iteration
-=======
       swap(&b, &c);
       swap(&fb, &fc);
       a = c;
@@ -83,7 +72,6 @@ roots_error_t roots_brent(
     }
 
     // Step 3.c: Set the tolerance for this iteration
->>>>>>> 9b5fb6f (Clang-formatted; minor updateS)
     tol = 2 * DBL_EPSILON * fabs(b) + 0.5 * r->tol;
 
     // Step 3.e: Compute midpoint
@@ -98,11 +86,7 @@ roots_error_t roots_brent(
 
     // Step 3.g: Check whether to bisect or interpolate
     if(fabs(e) < tol || fabs(fa) <= fabs(fb)) {
-<<<<<<< HEAD
-      e = d = m;  // bisect
-=======
       e = d = m; // bisect
->>>>>>> 9b5fb6f (Clang-formatted; minor updateS)
     }
     else {
       // Attempt interpolation
@@ -131,17 +115,10 @@ roots_error_t roots_brent(
         // Yes
         e = d;
         d = P / Q;
-<<<<<<< HEAD
-      }
-      else {
-        e = d = m;  // Interpolation failed; do a bisection
-      }
-=======
       }
       else {
         e = d = m; // Interpolation failed; do a bisection
       }
->>>>>>> 9b5fb6f (Clang-formatted; minor updateS)
     }
     a = b;
     fa = fb;
