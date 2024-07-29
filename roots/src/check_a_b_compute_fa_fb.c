@@ -28,8 +28,7 @@
  *                 - roots_error_root_not_bracketed if the interval [a,b]
  *                   does not bracket a root of f(x)
  */
-roots_error_t
-check_a_b_compute_fa_fb(
+roots_error_t check_a_b_compute_fa_fb(
       double f(const double, void *restrict),
       void *restrict fparams,
       double *restrict a,

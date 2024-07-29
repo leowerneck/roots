@@ -24,8 +24,7 @@
  *
  * References : https://en.wikipedia.org/wiki/Brent%27s_method
  */
-roots_error_t
-roots_dekker(
+roots_error_t roots_dekker(
       double f(const double, void *restrict),
       void *restrict fparams,
       double a,

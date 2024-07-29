@@ -22,59 +22,51 @@ typedef struct roots_params {
   double residual, root, tol;
 } roots_params;
 
-void
-roots_info(const roots_params *restrict r);
+void roots_info(const roots_params *restrict r);
 
-roots_error_t
-roots_bisection(
+roots_error_t roots_bisection(
       double f(const double, void *restrict),
       void *restrict params,
       double a,
       double b,
       roots_params *restrict r);
 
-roots_error_t
-roots_secant(
+roots_error_t roots_secant(
       double f(const double, void *restrict),
       void *restrict params,
       double a,
       double b,
       roots_params *restrict r);
 
-roots_error_t
-roots_false_position(
+roots_error_t roots_false_position(
       double f(const double, void *restrict),
       void *restrict params,
       double a,
       double b,
       roots_params *restrict r);
 
-roots_error_t
-roots_dekker(
+roots_error_t roots_dekker(
       double f(const double, void *restrict),
       void *restrict params,
       double a,
       double b,
       roots_params *restrict r);
 
-roots_error_t
-roots_ridder(
+roots_error_t roots_ridder(
       double f(const double, void *restrict),
       void *restrict params,
       double a,
       double b,
       roots_params *restrict r);
 
-roots_error_t
-roots_brent(
+roots_error_t roots_brent(
       double f(const double, void *restrict),
       void *restrict params,
       double a,
       double b,
       roots_params *restrict r);
 
-roots_error_t
-roots_toms748(
+roots_error_t roots_toms748(
       double f(const double, void *restrict),
       void *restrict params,
       double a,

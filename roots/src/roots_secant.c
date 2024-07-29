@@ -24,8 +24,7 @@
  *
  * References : https://en.wikipedia.org/wiki/Secant_method
  */
-roots_error_t
-roots_secant(
+roots_error_t roots_secant(
       double f(const double, void *restrict),
       void *restrict fparams,
       double a,

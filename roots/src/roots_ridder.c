@@ -24,8 +24,7 @@
  *
  * References : https://en.wikipedia.org/wiki/Ridders%27_method
  */
-roots_error_t
-roots_ridder(
+roots_error_t roots_ridder(
       double f(const double, void *restrict),
       void *restrict fparams,
       double a,

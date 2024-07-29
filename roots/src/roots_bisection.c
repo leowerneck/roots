@@ -24,8 +24,7 @@
  *
  * References : https://en.wikipedia.org/wiki/Bisection_method
  */
-roots_error_t
-roots_bisection(
+roots_error_t roots_bisection(
       double f(const double, void *restrict),
       void *restrict fparams,
       double a,

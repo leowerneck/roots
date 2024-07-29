@@ -10,19 +10,14 @@
  *
  * Returns    : Nothing.
  */
-void
-roots_info(const roots_params *restrict r) {
+void roots_info(const roots_params *restrict r) {
 
   // Step 1: Print basic message to the user
   printf("(roots) Root-finding information:\n");
   printf("(roots)   %16s : %s\n", "Method", r->method);
   printf(
-        "(roots)   %16s : [%c%21.15e, %c%21.15e]\n",
-        "Initial interval",
-        r->a >= 0 ? '+' : '-',
-        fabs(r->a),
-        r->b >= 0 ? '+' : '-',
-        fabs(r->b));
+        "(roots)   %16s : [%c%21.15e, %c%21.15e]\n", "Initial interval",
+        r->a >= 0 ? '+' : '-', fabs(r->a), r->b >= 0 ? '+' : '-', fabs(r->b));
   printf("(roots)   %16s : ", "Status");
   switch(r->error_key) {
     case roots_continue:

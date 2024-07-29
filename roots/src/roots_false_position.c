@@ -24,8 +24,7 @@
  *
  * References : https://en.wikipedia.org/wiki/Regula_falsi
  */
-roots_error_t
-roots_false_position(
+roots_error_t roots_false_position(
       double f(const double, void *restrict),
       void *restrict fparams,
       double a,

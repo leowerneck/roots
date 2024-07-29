@@ -12,32 +12,11 @@
  *
  * Returns    : Nothing.
  */
-static inline void
-swap(double *restrict a, double *restrict b) {
+static inline void swap(double *restrict a, double *restrict b) {
 
   const double c = *a;
   *a = *b;
   *b = c;
-}
-
-/*
- * Function   : cicle
- * Author     : Leo Werneck
- *
- * From inputs a, b, c, set a, b, c = b, c, b.
- *
- * Parameters : a        - First number.
- *            : b        - Second number.
- *            : c        - Third number.
- *
- * Returns    : Nothing.
- */
-static inline void
-cicle(double *restrict a, double *restrict b, double *restrict c) {
-
-  *a = *b;
-  *b = *c;
-  *c = *b;
 }
 
 /*
@@ -51,11 +30,7 @@ cicle(double *restrict a, double *restrict b, double *restrict c) {
  *
  * Returns    : +1 if x>=0, -1 otherwise.
  */
-static inline int
-sign(const double x) {
-
-  return (x > 0) - (x < 0);
-}
+static inline int sign(const double x) { return (x > 0) - (x < 0); }
 
 /*
  * Function   : ensure_b_is_closest_to_root
@@ -70,8 +45,7 @@ sign(const double x) {
  *
  * Returns    : Nothing.
  */
-static inline void
-ensure_b_is_closest_to_root(
+static inline void ensure_b_is_closest_to_root(
       double *restrict a,
       double *restrict b,
       double *restrict fa,
@@ -151,8 +125,7 @@ ensure_b_is_closest_to_root(
  * Function prototypes *
  ***********************/
 // This function is implemented in check_a_b_compute_fa_fb.c
-roots_error_t
-check_a_b_compute_fa_fb(
+roots_error_t check_a_b_compute_fa_fb(
       double f(const double, void *restrict),
       void *restrict params,
       double *restrict a,

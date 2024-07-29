@@ -18,8 +18,7 @@
 #include "roots.h"
 #include "utils.h"
 
-static void
-bracket(
+static void bracket(
       double f(const double, void *restrict),
       void *restrict fparams,
       double *restrict a,
@@ -84,9 +83,7 @@ bracket(
   }
 }
 
-static inline double
-safe_div(double num, double denom, double r) {
-
+static inline double safe_div(double num, double denom, double r) {
   //
   // return num / denom without overflow,
   // return r if overflow would occur.
@@ -119,8 +116,7 @@ secant_interpolate(const double a, const double b, const double fa, const double
   return c;
 }
 
-static double
-quadratic_interpolate(
+static double quadratic_interpolate(
       const double a,
       const double b,
       const double d,
@@ -174,8 +170,7 @@ quadratic_interpolate(
   return c;
 }
 
-static double
-cubic_interpolate(
+static double cubic_interpolate(
       const double a,
       const double b,
       const double d,
@@ -214,8 +209,7 @@ cubic_interpolate(
   return c;
 }
 
-roots_error_t
-roots_toms748(
+roots_error_t roots_toms748(
       double f(const double, void *restrict),
       void *restrict fparams,
       double a,
@@ -292,8 +286,8 @@ roots_toms748(
     //
     double min_diff = 32 * DBL_MIN;
     bool prof = (fabs(fa - fb) < min_diff) || (fabs(fa - fd) < min_diff)
-             || (fabs(fa - fe) < min_diff) || (fabs(fb - fd) < min_diff)
-             || (fabs(fb - fe) < min_diff) || (fabs(fd - fe) < min_diff);
+                || (fabs(fa - fe) < min_diff) || (fabs(fb - fd) < min_diff)
+                || (fabs(fb - fe) < min_diff) || (fabs(fd - fe) < min_diff);
     if(prof) {
       c = quadratic_interpolate(a, b, d, fa, fb, fd, 2);
     }
@@ -313,8 +307,9 @@ roots_toms748(
     //
     // Now another interpolated step:
     //
-    prof = (fabs(fa - fb) < min_diff) || (fabs(fa - fd) < min_diff) || (fabs(fa - fe) < min_diff)
-        || (fabs(fb - fd) < min_diff) || (fabs(fb - fe) < min_diff) || (fabs(fd - fe) < min_diff);
+    prof = (fabs(fa - fb) < min_diff) || (fabs(fa - fd) < min_diff)
+           || (fabs(fa - fe) < min_diff) || (fabs(fb - fd) < min_diff)
+           || (fabs(fb - fe) < min_diff) || (fabs(fd - fe) < min_diff);
     if(prof) {
       c = quadratic_interpolate(a, b, d, fa, fb, fd, 3);
     }
