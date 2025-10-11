@@ -42,13 +42,13 @@ roots_error_t roots_brent(
 
   // Step 1: Check whether a or b is the root; compute fa and fb
   double fa, fb;
-  if(check_a_b_compute_fa_fb(f, fparams, &a, &b, &fa, &fb, r) >= roots_success) {
+  if(check_a_b_compute_fa_fb(f, fparams, &a, &b, &fa, &fb, r) != roots_continue) {
     return r->error_key;
   }
 
   // Step 2: Declare auxiliary variables
-  double c = b;
-  double fc = fb;
+  double c = a;
+  double fc = fa;
   double d = b - a;
   double e = d;
   double tol, m, P, Q, R, S;
@@ -74,11 +74,11 @@ roots_error_t roots_brent(
     // Step 3.c: Set the tolerance for this iteration
     tol = 2 * DBL_EPSILON * fabs(b) + 0.5 * r->tol;
 
-    // Step 3.e: Compute midpoint
+    // Step 3.d: Compute midpoint
     m = 0.5 * (c - b);
 
-    // Step 3.f: Check for convergence
-    if(fabs(b - a) < tol || fb == 0.0) {
+    // Step 3.e: Check for convergence
+    if(fabs(m) < tol || fb == 0.0) {
       r->root = b;
       r->residual = fb;
       return (r->error_key = roots_success);
